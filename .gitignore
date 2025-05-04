@@ -1,5 +1,5 @@
 # katalogi IDE
-src/.idea/
+.idea/
 # katalogi build‑ów
 cmake-build-*/
 build/
