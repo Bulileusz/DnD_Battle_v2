@@ -1,0 +1,12 @@
+# katalogi IDE
+.idea/
+# katalogi build‑ów
+cmake-build-*/
+build/
+# binarki
+*.exe
+*.dll
+*.obj
+*.o
+# inne tymczasowe
+*.log
