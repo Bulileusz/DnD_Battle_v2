@@ -1,23 +1,14 @@
-#include <SFML/Graphics.hpp>
+#include "character/Character.h"
+#include <iostream>
 
 int main() {
-    sf::RenderWindow window(sf::VideoMode(800, 600), "DnD Battle Test");
+    Character hero("Hero", 100, 15, 5);
+    Character goblin("Goblin", 40, 8, 2);
 
-    sf::RectangleShape rectangle(sf::Vector2f(200.f, 100.f));
-    rectangle.setFillColor(sf::Color::Green);
-    rectangle.setPosition(300.f, 250.f);
+    std::cout << "Hero HP: "   << hero.hp()   << '\n';
+    std::cout << "Goblin HP: " << goblin.hp() << '\n';
 
-    while (window.isOpen()) {
-        sf::Event event;
-        while (window.pollEvent(event)) {
-            if (event.type == sf::Event::Closed)
-                window.close();
-        }
-
-        window.clear();
-        window.draw(rectangle);
-        window.display();
-    }
-
+    goblin.takeDamage(hero.basicAttack());
+    std::cout << "Goblin dostał cios! Zostało mu HP: " << goblin.hp() << '\n';
     return 0;
 }
