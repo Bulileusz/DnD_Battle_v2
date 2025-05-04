@@ -1,5 +1,0 @@
-"S:\CLion 2024.2.2\bin\cmake\win\x64\bin\cmake.exe" -DCMAKE_BUILD_TYPE=Debug "-DCMAKE_MAKE_PROGRAM=S:/CLion 2024.2.2/bin/ninja/win/x64/ninja.exe" -G Ninja -S S:\Studia\Projekty\DnD_Battle -B S:\Studia\Projekty\DnD_Battle\cmake-build-debug
--- Found SFML 2.6.1 in S:/SFML-2.6.1/lib/cmake/SFML
--- Configuring done (0.2s)
--- Generating done (0.0s)
--- Build files have been written to: S:/Studia/Projekty/DnD_Battle/cmake-build-debug

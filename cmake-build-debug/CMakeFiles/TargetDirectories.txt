@@ -1,3 +1,0 @@
-S:/Studia/Projekty/DnD_Battle/cmake-build-debug/CMakeFiles/DnD_Battle.dir
-S:/Studia/Projekty/DnD_Battle/cmake-build-debug/CMakeFiles/edit_cache.dir
-S:/Studia/Projekty/DnD_Battle/cmake-build-debug/CMakeFiles/rebuild_cache.dir
