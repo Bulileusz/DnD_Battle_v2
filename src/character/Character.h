@@ -16,4 +16,9 @@ public:
 
     int  basicAttack() const;          // zwraca obrażenia
     void takeDamage(int dmg);          // odejmuje HP
+
+    //gettery do walki
+    const std::string& name() const {return name_; }
+    int getAttack() const {return attack_;  }
+    int getDefense() const {return defense_;}
 };
