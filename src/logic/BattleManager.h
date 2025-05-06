@@ -7,4 +7,11 @@ class BattleManager {
 public:
     // rozgrywa pojedynczą walkę gracz  vs  jeden przeciwnik
     void fight(Player& player, Enemy& enemy);
+
+    void runLoop(Player& player);
+    Enemy spawnEnemyForLevel(int level);
 };
+
+
+
+

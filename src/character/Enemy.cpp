@@ -4,13 +4,13 @@ Enemy::Enemy(std::string name, int hp, int atk, int def)
         : Character(std::move(name), hp, atk, def) {}
 
 Enemy Enemy::createGoblin() {
-    return Enemy("Goblin", 60, 10, 4);
+    return Enemy("Goblin", 60, 8, 12);
 }
 
 Enemy Enemy::createOrc() {
-    return Enemy("Orc", 100, 14, 6);
+    return Enemy("Orc", 100, 12, 14);
 }
 
 Enemy Enemy::createBoss() {
-    return Enemy("Demon Lord", 200, 25, 10);
+    return Enemy("Demon Lord", 200, 20, 18);
 }

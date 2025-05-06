@@ -2,6 +2,7 @@
 #include "Character.h"
 
 class Player : public Character {
+
 public:
     enum class ClassType { Warrior, Mage, Archer };
 
@@ -9,6 +10,25 @@ public:
 
     ClassType getClassType() const;
 
+    void gainExp(int amount);
+    void checkLevelUp();
+
+    int getLevel()  const { return level_;  }
+    int getExp()    const { return exp_;    }
+
+    int getDefense()    const override {
+        return isDefending_ ? defense_ + 5 : defense_;
+    }
+
+    void setDefending(bool state)   { isDefending_ = state; }
+    bool isDefending()              {return isDefending_;   }
+
 private:
     ClassType classType_;
+    int level_;
+    int exp_;
+    bool isDefending_ = false;
+
 };
+
+
