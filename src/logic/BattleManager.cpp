@@ -83,15 +83,44 @@ Enemy BattleManager::spawnEnemyForLevel(int level) {
 }
 
 void BattleManager::runLoop(Player& player) {
-    int wave = 1;
-    while (player.isAlive()) {
-        std::cout << "\n FALA " << wave << " | Poziom gracza: " << player.getLevel() << "\n";
+    bool playing = true;
 
-        Enemy enemy = spawnEnemyForLevel(player.getLevel());
-        fight(player, enemy);
+    while (playing) {
+        int wave = 1;
+        player.reset();
+        std::cout << "\n=== NOWA GRA ===\n";
 
-        wave++;
+        while (player.isAlive()) {
+            std::cout << "\n FALA " << wave << " | Poziom gracza: " << player.getLevel() << "\n";
+
+            Enemy enemy = spawnEnemyForLevel(player.getLevel());
+            fight(player, enemy);
+
+            if (player.isAlive()) {
+                int before = player.hp();
+                int heal = player.getMaxHp() * 0.2;
+                player.heal(heal);
+                int healedAmount = player.hp() - before;
+
+
+
+                if (healedAmount > 0) {
+                    std::cout << ">> Opatrujesz rany po walce. Leczysz się " << heal << " HP.\n";
+                }
+            }
+            wave++;
+        }
+
+        std::cout << "\n=== KONIEC GRY ===\n";
+        std::cout << "Fala:     " << wave << "\n";
+        std::cout << "Poziom:   " << player.getLevel() << "\n";
+        std::cout << "EXP:      " << player.getExp() << "\n";
+
+        std::cout << "\nSpróbować jeszcze raz? (t/n): ";
+        char choice;
+        std::cin >> choice;
+        if (choice != 't' && choice != 'T') {
+            playing = false;
+        }
     }
-
-    std::cout <<"\n Koniec gry. Gracz poległ na fali " << wave << ".\n";
 }
