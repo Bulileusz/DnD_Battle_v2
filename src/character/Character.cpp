@@ -3,7 +3,8 @@
 #include <iostream>
 
 Character::Character(std::string name, int hp, int atk, int def)
-        : name_(std::move(name)), hp_(hp), attack_(atk), defense_(def) {}
+    : name_(std::move(name)), hp_(hp), attack_(atk), defense_(def) {
+}
 
 int Character::basicAttack() const {
     return attack_;

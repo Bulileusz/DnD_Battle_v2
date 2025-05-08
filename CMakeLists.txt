@@ -14,7 +14,10 @@ add_executable(DnD_Battle
         src/character/Player.cpp
         src/character/Enemy.cpp
         src/logic/BattleManager.cpp
-        src/gui/GameWindow.cpp)
+        src/gui/GameWindow.cpp
+        src/screens/MainMenuScreen.cpp
+        src/screens/ClassSelectionScreen.cpp
+        src/screens/GameScreen.cpp)
 
 # SFML
 find_package(SFML COMPONENTS graphics window system REQUIRED)
