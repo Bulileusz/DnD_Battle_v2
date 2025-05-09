@@ -14,3 +14,13 @@ Enemy Enemy::createOrc() {
 Enemy Enemy::createBoss() {
     return Enemy("Demon Lord", 200, 20, 18);
 }
+
+void Enemy::setTexture(const sf::Texture& tex) {
+    sprite_.setTexture(tex);
+    sprite_.setScale(2.0f, 2.0f); //
+    sprite_.setPosition(500, 200);
+}
+
+const sf::Sprite& Enemy::getSprite() const {
+    return sprite_;
+}

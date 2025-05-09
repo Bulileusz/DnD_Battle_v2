@@ -21,8 +21,14 @@ class GameScreen : public Screen {
     sf::Text attackLabel;
     sf::Text defendLabel;
 
+    void performPlayerAttack();
+    void performPlayerDefense();
 
+    void performEnemyAttack(std::string& log);
+    void assignEnemyTexture();
     bool finished = false;
+
+    int waveNumber = 1;
 
     public:
       GameScreen(Player::ClassType selectedClass);
@@ -37,4 +43,6 @@ class GameScreen : public Screen {
 
       BattleManager& getBattleManager() { return battleManager; }
       const BattleManager& getBattleManager() const { return battleManager; }
+      int getWaveNumber() const { return waveNumber; }
       };
+
