@@ -21,6 +21,7 @@ class GameScreen : public Screen {
     sf::Text attackLabel;
     sf::Text defendLabel;
 
+
     bool finished = false;
 
     public:
@@ -28,5 +29,12 @@ class GameScreen : public Screen {
       void handleEvent(sf::Event& event, sf::RenderWindow& window) override;
       void update() override;
       void render(sf::RenderWindow& window) override;
-      bool isFinished() const override { return finished; }
+      // bool isFinished() const override { return finished; }
+      bool isFinished() const override;
+      bool playerLost() const;
+      Player& getPlayer() { return player; }
+      const Player& getPlayer() const { return player; }
+
+      BattleManager& getBattleManager() { return battleManager; }
+      const BattleManager& getBattleManager() const { return battleManager; }
       };

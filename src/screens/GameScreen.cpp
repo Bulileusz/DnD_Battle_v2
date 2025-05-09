@@ -1,5 +1,6 @@
 #include "GameScreen.h"
 #include <iostream>
+#include "../character/Player.h"
 
 GameScreen::GameScreen(Player::ClassType selectedClass)
     : player(selectedClass), enemy(BattleManager().spawnEnemyForLevel(1))
@@ -40,12 +41,22 @@ GameScreen::GameScreen(Player::ClassType selectedClass)
   defendLabel.setCharacterSize(20);
   defendLabel.setString("Obrona");
   defendLabel.setPosition(275, 508);
+
+  //TEST - INSTANT LOSE:
+  // player.takeDamage(player.hp());
   }
 
   void GameScreen::handleEvent(sf::Event& event, sf::RenderWindow& window) {
     if (event.type == sf::Event::MouseButtonPressed) {
-      auto mousePos = sf::Mouse::getPosition(window);
-      // kliki tutaj
+      sf::Vector2i mousePos = sf::Mouse::getPosition(window);
+      sf::Vector2f worldPos = window.mapPixelToCoords(mousePos);
+
+      if (attackButton.getGlobalBounds().contains(worldPos)) {
+        //TEST - INSTA DEAD:
+        // player.takeDamage(player.hp());
+        // logText.setString("Gracz padł!");
+      }
+      //kliki tutaj
     }
   }
   void GameScreen::update() {
@@ -63,7 +74,13 @@ GameScreen::GameScreen(Player::ClassType selectedClass)
     window.draw(defendLabel);
     }
 
+  bool GameScreen::isFinished() const {
+    return playerLost();
+}
 
+  bool GameScreen::playerLost() const {
+  return player.hp() <= 0;
+}
 //  sf::Text text("Trwa walka...", font, 24);
 //  text.setPosition(200, 280);
 //  window.draw(text);

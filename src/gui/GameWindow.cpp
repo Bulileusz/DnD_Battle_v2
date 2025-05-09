@@ -5,8 +5,8 @@
 #include "GameWindow.h"
 #include "../screens/ClassSelectionScreen.h"
 #include "../character/Player.h"
-#include "../screens/Gamescreen.h"
-
+#include "../screens/GameScreen.h"
+#include "../screens/GameOverScreen.h"
 
 void GameWindow::run() {
     sf::RenderWindow window(sf::VideoMode(800, 600), "DnD Battle");
@@ -40,20 +40,31 @@ void GameWindow::run() {
             currentScreen->update();
 
         if (currentScreen && currentScreen->isFinished()) {
-
-            if (dynamic_cast<MainMenuScreen*>(currentScreen.get())) {
+            // currentScreen = std::make_unique<ClassSelectionScreen>();
+            if (dynamic_cast<MainMenuScreen *>(currentScreen.get())) {
                 currentScreen = std::make_unique<ClassSelectionScreen>();
-            }
-
-            else if (auto classScreen = dynamic_cast<ClassSelectionScreen*>(currentScreen.get())) {
+            } else if (auto classScreen = dynamic_cast<ClassSelectionScreen *>(currentScreen.get())) {
                 Player::ClassType selected;
-                switch(classScreen->getSelectedClass()) {
-                    case 1: selected = Player::ClassType::Warrior; break;
-                    case 2: selected = Player::ClassType::Mage; break;
-                    case 3: selected = Player::ClassType::Archer; break;
+                switch (classScreen->getSelectedClass()) {
+                    case 1: selected = Player::ClassType::Warrior;
+                    break;
+                    case 2: selected = Player::ClassType::Mage;
+                    break;
+                    case 3: selected = Player::ClassType::Archer;
+                    break;
                     default: selected = Player::ClassType::Warrior;
                 }
                 currentScreen = std::make_unique<GameScreen>(selected);
+            } else if (auto game = dynamic_cast<GameScreen *>(currentScreen.get())) {
+                if (game->playerLost()) {
+                    currentScreen = std::make_unique<GameOverScreen>(
+                        game->getPlayer().getLevel(),
+                        game->getPlayer().getExp(),
+                        game->getBattleManager().getWaveNumber()
+                    );
+                }
+            } else if (dynamic_cast<GameOverScreen *>(currentScreen.get())) {
+                currentScreen = std::make_unique<ClassSelectionScreen>();
             }
         }
         window.clear();
@@ -61,4 +72,7 @@ void GameWindow::run() {
             currentScreen->render(window);
         window.display();
     }
+
 }
+
+
