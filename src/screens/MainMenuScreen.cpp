@@ -5,11 +5,18 @@ MainMenuScreen::MainMenuScreen() {
     if (!font.loadFromFile("assets/arial.ttf")) {
         std::cerr << "Nie udało się wczytać czcionki\n";
     }
-    if (!backgroundTexture.loadFromFile("assets/backgroundPlaceholder.png")) {
+    if (!backgroundTexture.loadFromFile("assets/menu_bg.png")) {
         std::cerr << "Nie wczytano tła\n";
     }
     background.setTexture(backgroundTexture);
 
+    sf::Vector2u textureSize = backgroundTexture.getSize();
+    sf::Vector2u windowSize(800,600);
+
+    background.setScale(
+        static_cast<float>(windowSize.x) / textureSize.x,
+        static_cast<float>(windowSize.y) / textureSize.y
+        );
 
     title.setFont(font);
     title.setString("DnD Battle");

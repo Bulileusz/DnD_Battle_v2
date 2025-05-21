@@ -5,6 +5,18 @@ GameOverScreen::GameOverScreen(int level, int exp, int wave) {
   if (!font.loadFromFile("assets/arial.ttf")) {
     std::cerr << "Czcionka error - game over screen\n";
     }
+  if (!backgroundTexture.loadFromFile("assets/gameover_bg.png")) {
+    std::cerr << "Nie wczytano tła game over.\n";
+  }
+  background.setTexture(backgroundTexture);
+
+  sf::Vector2u textureSize = backgroundTexture.getSize();
+  sf::Vector2u windowSize(800,600);
+
+  background.setScale(
+      static_cast<float>(windowSize.x) / textureSize.x,
+      static_cast<float>(windowSize.y) / textureSize.y
+      );
 
     title.setFont(font);
     title.setString("KONIEC GRY");
@@ -32,6 +44,7 @@ void GameOverScreen::handleEvent(sf::Event& event, sf::RenderWindow& window) {
 }
 
 void GameOverScreen::render(sf::RenderWindow& window) {
+  window.draw(background);
   window.draw(title);
   window.draw(statsText);
   window.draw(prompt);

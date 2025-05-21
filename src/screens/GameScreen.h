@@ -21,6 +21,9 @@ class GameScreen : public Screen {
     sf::Text attackLabel;
     sf::Text defendLabel;
 
+    sf::Texture backgroundTexture;
+    sf::Sprite background;
+
     void performPlayerAttack();
     void performPlayerDefense();
 

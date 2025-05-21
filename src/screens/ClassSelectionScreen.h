@@ -9,6 +9,8 @@ class ClassSelectionScreen : public Screen {
     sf::Text warriorOption;
     sf::Text mageOption;
     sf::Text archerOption;
+    sf::Texture backgroundTexture;
+    sf::Sprite background;
 
     bool finished = false;
     int selectedClass = 0;

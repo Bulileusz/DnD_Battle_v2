@@ -11,6 +11,22 @@ GameScreen::GameScreen(Player::ClassType selectedClass)
     if (!font.loadFromFile("assets/arial.ttf")) {
         std::cerr << "Nie wczytano czcionki\n";
     }
+    std::string bgPath = (enemy.name() == "Demon Lord")
+    ? "assets/boss_bg.png"
+    : "assets/fight_bg.png";
+
+    if(!backgroundTexture.loadFromFile(bgPath)) {
+        std::cerr << "nie wczytano tła walki\n";
+    }
+    background.setTexture(backgroundTexture);
+
+    sf::Vector2u textureSize = backgroundTexture.getSize();
+    sf::Vector2u windowSize(800,600);
+
+    background.setScale(
+        static_cast<float>(windowSize.x) / textureSize.x,
+        static_cast<float>(windowSize.y) / textureSize.y
+        );
     // Staty
     playerStats.setFont(font);
     playerStats.setCharacterSize(20);
@@ -74,9 +90,9 @@ void GameScreen::update() {
 }
 
 void GameScreen::render(sf::RenderWindow &window) {
+    window.draw(background);
     window.draw(playerStats);
     window.draw(enemyStats);
-
     window.draw(enemy.getSprite());
     window.draw(logText);
     window.draw(attackButton);
@@ -124,6 +140,22 @@ void GameScreen::performPlayerAttack() {
         log += "\nLeczysz się " + std::to_string(heal) + " HP.";
         enemy = battleManager.spawnEnemyForLevel(waveNumber);
         assignEnemyTexture();
+        std::string bgPath = (enemy.name() == "Demon Lord")
+                     ? "assets/boss_bg.png"
+                     : "assets/fight_bg.png";
+
+        if (!backgroundTexture.loadFromFile(bgPath)) {
+            std::cerr << "Nie wczytano tła walki\n";
+        }
+        background.setTexture(backgroundTexture);
+
+        // skalowanie do okna
+        sf::Vector2u textureSize = backgroundTexture.getSize();
+        sf::Vector2u windowSize(800, 600);
+        background.setScale(
+            static_cast<float>(windowSize.x) / textureSize.x,
+            static_cast<float>(windowSize.y) / textureSize.y
+        );
 
         log += "\n Pojawił się nowy wróg (Fala " + std::to_string(waveNumber) + ")";
     } else {
@@ -162,8 +194,14 @@ void GameScreen::performPlayerDefense() {
 
 void GameScreen::assignEnemyTexture() {
     if (enemy.name() == "Goblin") {
-        goblinTex.loadFromFile("assets/goblin.jpeg");
+        goblinTex.loadFromFile("assets/goblin.png");
         enemy.setTexture(goblinTex);
+    } else if (enemy.name() == "Orc") {
+        orcTex.loadFromFile("assets/orc.png");
+        enemy.setTexture(orcTex);
+    } else if (enemy.name() == "Demon Lord") {
+        bossTex.loadFromFile("assets/demon_lord.png");
+        enemy.setTexture(bossTex);
     }
 }
 //  sf::Text text("Trwa walka...", font, 24);

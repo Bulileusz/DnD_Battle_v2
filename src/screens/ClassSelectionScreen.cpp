@@ -5,6 +5,18 @@ ClassSelectionScreen::ClassSelectionScreen() {
     if (!font.loadFromFile("assets/arial.ttf")) {
         std::cerr << "Czcionka - w selekcji klasy - problem\n";
     }
+    if (!backgroundTexture.loadFromFile("assets/class_bg.png")) {
+        std::cerr << "Nie wczytano tła.\n";
+    }
+    background.setTexture(backgroundTexture);
+
+    sf::Vector2u textureSize = backgroundTexture.getSize();
+    sf::Vector2u windowSize(800,600);
+
+    background.setScale(
+        static_cast<float>(windowSize.x) / textureSize.x,
+        static_cast<float>(windowSize.y) / textureSize.y
+        );
 
     title.setFont(font);
     title.setString("Wybierz klasę postaci:");
@@ -53,6 +65,7 @@ void ClassSelectionScreen::handleEvent(sf::Event &event, sf::RenderWindow &windo
 }
 
 void ClassSelectionScreen::render(sf::RenderWindow &window) {
+    window.draw(background);
     window.draw(title);
     window.draw(warriorOption);
     window.draw(mageOption);

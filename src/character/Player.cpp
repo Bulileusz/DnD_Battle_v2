@@ -34,7 +34,7 @@ void Player::initStats() {
     hp_ = getBaseHp();
     switch (classType_) {
         case ClassType::Warrior:
-            attack_ = 12; defense_ = 8; break;
+            attack_ = 120; defense_ = 8; break;
         case ClassType::Mage:
             attack_ = 18; defense_ =  3; break;
         case ClassType::Archer:

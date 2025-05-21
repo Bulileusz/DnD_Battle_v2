@@ -8,6 +8,8 @@ private:
   sf::Text title;
   sf::Text statsText;
   sf::Text prompt;
+  sf::Texture backgroundTexture;
+  sf::Sprite background;
 
   bool finished = false;
 
