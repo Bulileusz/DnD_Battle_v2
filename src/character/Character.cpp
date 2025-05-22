@@ -13,4 +13,5 @@ int Character::basicAttack() const {
 void Character::takeDamage(int dmg) {
     hp_ -= dmg;
     std::cout << "[DEBUG] HP po ataku: " << hp_ << " (-" << dmg << ")\n";
+    if (hp_ < 0) hp_= 0;
 }

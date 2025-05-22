@@ -29,6 +29,7 @@ public:
     int getMaxHp() const;
     int getBaseHp() const;
 
+    std::string getSpritePath() const;
 private:
     ClassType classType_;
     int level_;

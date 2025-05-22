@@ -7,26 +7,36 @@ sf::Texture goblinTex, orcTex, bossTex;
 
 GameScreen::GameScreen(Player::ClassType selectedClass)
     : player(selectedClass), enemy(BattleManager().spawnEnemyForLevel(1)) {
+    std::string PlayerPath;
+
+    std::string path = player.getSpritePath();
+    if (!playerTexture.loadFromFile(path)) {
+        std::cerr << "Nie wczytano sprite'a gracza!\n";
+    }
+    playerSprite.setTexture(playerTexture);
+    playerSprite.setScale(.7f, .7f);
+    playerSprite.setPosition(-60.f,280.f);
+
     assignEnemyTexture();
-    if (!font.loadFromFile("assets/arial.ttf")) {
+    if (!font.loadFromFile("assets/Spectral-Regular.ttf")) {
         std::cerr << "Nie wczytano czcionki\n";
     }
     std::string bgPath = (enemy.name() == "Demon Lord")
-    ? "assets/boss_bg.png"
-    : "assets/fight_bg.png";
+                             ? "assets/boss_bg.png"
+                             : "assets/fight_bg.png";
 
-    if(!backgroundTexture.loadFromFile(bgPath)) {
+    if (!backgroundTexture.loadFromFile(bgPath)) {
         std::cerr << "nie wczytano tła walki\n";
     }
     background.setTexture(backgroundTexture);
 
     sf::Vector2u textureSize = backgroundTexture.getSize();
-    sf::Vector2u windowSize(800,600);
+    sf::Vector2u windowSize(800, 600);
 
     background.setScale(
         static_cast<float>(windowSize.x) / textureSize.x,
         static_cast<float>(windowSize.y) / textureSize.y
-        );
+    );
     // Staty
     playerStats.setFont(font);
     playerStats.setCharacterSize(20);
@@ -36,11 +46,22 @@ GameScreen::GameScreen(Player::ClassType selectedClass)
     enemyStats.setCharacterSize(20);
     enemyStats.setPosition(500, 30);
 
-    // Log
-    logText.setFont(font);
-    logText.setCharacterSize(18);
-    logText.setPosition(50, 400);
-    logText.setString("Start walki");
+    // Logi
+    logLeftText.setFont(font);
+    logLeftText.setCharacterSize(16);
+    logLeftText.setPosition(60, 20);
+    logLeftText.setFillColor(sf::Color::White);
+
+    logRightText.setFont(font);
+    logRightText.setCharacterSize(16);
+    logRightText.setPosition(440, 20);
+    logRightText.setFillColor(sf::Color::White);
+
+    logBackground.setSize(sf::Vector2f(700, 60));
+    logBackground.setPosition(40, 15);
+    logBackground.setFillColor(sf::Color(0, 0, 0, 180));
+    logBackground.setOutlineThickness(1);
+    logBackground.setOutlineColor(sf::Color::White);
 
     // Przyciski
     attackButton.setSize({140, 40});
@@ -49,7 +70,7 @@ GameScreen::GameScreen(Player::ClassType selectedClass)
 
     attackLabel.setFont(font);
     attackLabel.setCharacterSize(20);
-    attackLabel.setString("Atak");
+    attackLabel.setString(L"Atak");
     attackLabel.setPosition(90, 508);
 
     defendButton.setSize({140, 40});
@@ -58,14 +79,32 @@ GameScreen::GameScreen(Player::ClassType selectedClass)
 
     defendLabel.setFont(font);
     defendLabel.setCharacterSize(20);
-    defendLabel.setString("Obrona");
+    defendLabel.setString(L"Obrona");
     defendLabel.setPosition(275, 508);
+
+    // Tekst na środku:
+    popupBox.setSize({600.f, 140.f});
+    popupBox.setPosition(100.f, 200.f);
+    popupBox.setFillColor(sf::Color(0, 0, 0, 180));
+    popupBox.setOutlineColor(sf::Color::White);
+    popupBox.setOutlineThickness(2.f);
+
+    popupText.setFont(font);
+    popupText.setCharacterSize(20);
+    popupText.setFillColor(sf::Color::White);
+    popupText.setPosition(120.f, 220.f);
 
     //TEST - INSTANT LOSE:
     // player.takeDamage(player.hp());
 }
 
 void GameScreen::handleEvent(sf::Event &event, sf::RenderWindow &window) {
+    if (showPopup && event.type == sf::Event::MouseButtonPressed) {
+        showPopup = false;
+        return;
+    }
+
+
     if (event.type == sf::Event::MouseButtonPressed) {
         sf::Vector2i mousePos = sf::Mouse::getPosition(window);
         sf::Vector2f mouseWorldPos = window.mapPixelToCoords(mousePos);
@@ -85,8 +124,8 @@ void GameScreen::update() {
     if (enemy.hp() <= 0 && !finished) {
         finished = true;
     }
-    playerStats.setString("Gracz HP: " + std::to_string(player.hp()));
-    enemyStats.setString("Wróg HP: " + std::to_string(enemy.hp()));
+    playerStats.setString(L"Gracz HP: " + std::to_wstring(player.hp()));
+    enemyStats.setString(L"Wróg HP: " + std::to_wstring(enemy.hp()));
 }
 
 void GameScreen::render(sf::RenderWindow &window) {
@@ -94,15 +133,25 @@ void GameScreen::render(sf::RenderWindow &window) {
     window.draw(playerStats);
     window.draw(enemyStats);
     window.draw(enemy.getSprite());
-    window.draw(logText);
+    window.draw(playerSprite);
+
+    window.draw(logBackground);
+    window.draw(logLeftText);
+    window.draw(logRightText);
+
     window.draw(attackButton);
     window.draw(attackLabel);
     window.draw(defendButton);
     window.draw(defendLabel);
+
+    if (showPopup) {
+        window.draw(popupBox);
+        window.draw(popupText);
+    }
 }
 
 bool GameScreen::isFinished() const {
-    return playerLost();
+    return playerLost() || finished;
 }
 
 bool GameScreen::playerLost() const {
@@ -113,83 +162,99 @@ void GameScreen::performPlayerAttack() {
     player.setDefending(false);
 
     RollResult roll = rollD20();
-    std::string log = "> Rzut gracza d20: " + std::to_string(roll.value) + "\n";
+    playerLog = "Rzut gracza d20: " + std::to_string(roll.value) + "\n";
 
     if (roll.type == RollResultType::Miss) {
-        log += "Pudło!";
+        playerLog += "Pudło!";
     } else if (roll.type == RollResultType::Critical || (roll.value > enemy.getDefense())) {
         int dmg = player.basicAttack();
         if (roll.type == RollResultType::Critical) {
             dmg *= 2;
-            log += "Trafienie krytyczne!\n";
+            playerLog += "Trafienie krytyczne! ";
         }
 
         enemy.takeDamage(dmg);
-        log += "Trafiasz za " + std::to_string(dmg) + " obrażeń!\n";
-    } else {
-        log += "Wróg zablokował atak.";
-    }
+        playerLog += "Trafiasz za " + std::to_string(dmg) + " obrażeń!\n";
 
-    if (enemy.hp() <= 0) {
-        log += "\nWróg pokonany!";
-        waveNumber++;
-        player.gainExp(50);
-        int heal = player.getMaxHp() * 0.2;
-        player.heal(heal);
-
-        log += "\nLeczysz się " + std::to_string(heal) + " HP.";
-        enemy = battleManager.spawnEnemyForLevel(waveNumber);
-        assignEnemyTexture();
-        std::string bgPath = (enemy.name() == "Demon Lord")
-                     ? "assets/boss_bg.png"
-                     : "assets/fight_bg.png";
-
-        if (!backgroundTexture.loadFromFile(bgPath)) {
-            std::cerr << "Nie wczytano tła walki\n";
+        // ✅ Sprawdź czy boss padł — zakończ grę
+        if (enemy.hp() <= 0 && enemy.name() == "Demon Lord") {
+            finished = true;
+            return;
         }
-        background.setTexture(backgroundTexture);
 
-        // skalowanie do okna
-        sf::Vector2u textureSize = backgroundTexture.getSize();
-        sf::Vector2u windowSize(800, 600);
-        background.setScale(
-            static_cast<float>(windowSize.x) / textureSize.x,
-            static_cast<float>(windowSize.y) / textureSize.y
-        );
+        // ✅ Jeśli padł zwykły wróg – kontynuuj
+        else if (enemy.hp() <= 0) {
+            waveNumber++;
+            player.gainExp(50);
+            int heal = player.getMaxHp() * 0.2;
+            player.heal(heal);
 
-        log += "\n Pojawił się nowy wróg (Fala " + std::to_string(waveNumber) + ")";
+            std::string popup = "Wróg pokonany!\n";
+            popup += "Leczysz się " + std::to_string(heal) + " HP.\n";
+            popup += "Pojawił się nowy wróg (Fala " + std::to_string(waveNumber) + ")";
+
+            popupText.setString(sf::String::fromUtf8(popup.begin(), popup.end()));
+            showPopup = true;
+
+            enemy = battleManager.spawnEnemyForLevel(waveNumber);
+            assignEnemyTexture();
+
+            std::string bgPath = (enemy.name() == "Demon Lord")
+                                     ? "assets/boss_bg.png"
+                                     : "assets/fight_bg.png";
+
+            if (!backgroundTexture.loadFromFile(bgPath)) {
+                std::cerr << "Nie wczytano tła walki\n";
+            }
+
+            background.setTexture(backgroundTexture);
+            background.setScale(
+                800.f / backgroundTexture.getSize().x,
+                600.f / backgroundTexture.getSize().y
+            );
+        }
     } else {
-        performEnemyAttack(log);
+        playerLog += "Wróg zablokował atak.";
     }
 
-    logText.setString(log);
+    // ✅ Jeśli wróg nadal żyje, atakuje
+    if (enemy.hp() > 0) {
+        performEnemyAttack();
+    }
+
+    logLeftText.setString(sf::String::fromUtf8(playerLog.begin(), playerLog.end()));
+    logRightText.setString(sf::String::fromUtf8(enemyLog.begin(), enemyLog.end()));
 }
 
-void GameScreen::performEnemyAttack(std::string& log) {
+
+void GameScreen::performEnemyAttack() {
     RollResult roll = rollD20();
-    log += "\n Rzut wroga D20: " + std::to_string(roll.value) + "\n";
+    enemyLog = "Rzut wroga D20: " + std::to_string(roll.value) + "\n";
 
     if (roll.type == RollResultType::Miss) {
-        log += "Wróg pudłuje!";
-    } else if (roll.type ==RollResultType::Critical || (roll.value > player.getDefense())) {
+        enemyLog += "Wróg pudłuje!";
+    } else if (roll.type == RollResultType::Critical || (roll.value > player.getDefense())) {
         int dmg = enemy.basicAttack();
         if (roll.type == RollResultType::Critical) {
             dmg *= 2;
-            log += "Trafienie krytyczne!\n";
+            enemyLog += "Trafienie krytyczne!\n";
         }
 
         player.takeDamage(dmg);
-        log += "Wróg trafia za " + std::to_string(dmg) + " obrażeń!";
+        enemyLog += "Wróg trafia za " + std::to_string(dmg) + " obrażeń!";
     } else {
-        log += "Parujesz atak!";
+        enemyLog += "Parujesz atak!";
     }
 }
 
 void GameScreen::performPlayerDefense() {
     player.setDefending(true);
-    std::string log = "Gracz się broni (+5 DEF na jedną turę.)\n";
-    performEnemyAttack(log);
-    logText.setString(log);
+
+    performEnemyAttack();
+    std::string playerLog = "Gracz się broni (+5 DEF na jedną turę.)\n";
+    logLeftText.setString(sf::String::fromUtf8(playerLog.begin(), playerLog.end()));
+    logRightText.setString(sf::String::fromUtf8(enemyLog.begin(), enemyLog.end()));
+
 }
 
 void GameScreen::assignEnemyTexture() {
@@ -204,6 +269,7 @@ void GameScreen::assignEnemyTexture() {
         enemy.setTexture(bossTex);
     }
 }
+
 //  sf::Text text("Trwa walka...", font, 24);
 //  text.setPosition(200, 280);
 //  window.draw(text);

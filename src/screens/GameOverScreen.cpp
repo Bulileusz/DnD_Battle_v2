@@ -2,7 +2,7 @@
 #include <iostream>
 
 GameOverScreen::GameOverScreen(int level, int exp, int wave) {
-  if (!font.loadFromFile("assets/arial.ttf")) {
+  if (!font.loadFromFile("assets/Spectral-Regular.ttf")) {
     std::cerr << "Czcionka error - game over screen\n";
     }
   if (!backgroundTexture.loadFromFile("assets/gameover_bg.png")) {
@@ -19,21 +19,21 @@ GameOverScreen::GameOverScreen(int level, int exp, int wave) {
       );
 
     title.setFont(font);
-    title.setString("KONIEC GRY");
+    title.setString(L"KONIEC GRY");
     title.setCharacterSize(36);
     title.setPosition(270, 100);
 
     statsText.setFont(font);
     statsText.setCharacterSize(24);
     statsText.setPosition(200, 200);
-    statsText.setString("Poziom: " + std::to_string(level) +
-                        "    | EXP: " + std::to_string(exp) +
-                        "    | Fala: " + std::to_string(wave));
+  statsText.setString(L"Poziom: " + std::to_wstring(level) +
+                  L"    | EXP: " + std::to_wstring(exp) +
+                  L"    | Fala: " + std::to_wstring(wave));
 
     prompt.setFont(font);
     prompt.setCharacterSize(20);
     prompt.setPosition(220, 300);
-    prompt.setString("Wciśnij ENTER, aby zagrać ponownie");
+    prompt.setString(L"Wciśnij ENTER, aby wrócić do menu");
 
  }
 

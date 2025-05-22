@@ -34,7 +34,7 @@ void Player::initStats() {
     hp_ = getBaseHp();
     switch (classType_) {
         case ClassType::Warrior:
-            attack_ = 120; defense_ = 8; break;
+            attack_ = 12; defense_ = 8; break;
         case ClassType::Mage:
             attack_ = 18; defense_ =  3; break;
         case ClassType::Archer:
@@ -66,4 +66,13 @@ void Player::heal(int amount) {
     hp_+= amount;
     int maxHp = getMaxHp();
     if (hp_ > maxHp) hp_ = maxHp;
+}
+
+std::string Player::getSpritePath() const {
+    switch(classType_) {
+        case ClassType::Warrior: return "assets/warrior.png";
+        case ClassType::Mage: return "assets/mage.png";
+        case ClassType::Archer: return "assets/archer.png";
+        default: return "";
+    }
 }

@@ -56,11 +56,11 @@ void GameWindow::run() {
                 }
                 currentScreen = std::make_unique<GameScreen>(selected);
             } else if (auto game = dynamic_cast<GameScreen *>(currentScreen.get())) {
-                if (game->playerLost()) {
+                if (game->playerLost() || game->isFinished()) {
                     currentScreen = std::make_unique<GameOverScreen>(
                         game->getPlayer().getLevel(),
                         game->getPlayer().getExp(),
-                        game->getBattleManager().getWaveNumber()
+                        game->getWaveNumber()
                     );
                 }
             } else if (dynamic_cast<GameOverScreen *>(currentScreen.get())) {

@@ -4,15 +4,15 @@ Enemy::Enemy(std::string name, int hp, int atk, int def)
         : Character(std::move(name), hp, atk, def) {}
 
 Enemy Enemy::createGoblin() {
-    return Enemy("Goblin", 60, 8, 12);
+    return Enemy("Goblin", 50, 8, 2);
 }
 
 Enemy Enemy::createOrc() {
-    return Enemy("Orc", 100, 12, 14);
+    return Enemy("Orc", 50, 12, 2);
 }
 
 Enemy Enemy::createBoss() {
-    return Enemy("Demon Lord", 200, 20, 18);
+    return Enemy("Demon Lord", 50, 20, 2);
 }
 
 void Enemy::setTexture(const sf::Texture& tex) {

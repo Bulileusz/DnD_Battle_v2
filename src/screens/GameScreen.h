@@ -14,7 +14,11 @@ class GameScreen : public Screen {
     sf::Font font;
     sf::Text playerStats;
     sf::Text enemyStats;
-    sf::Text logText;
+
+    std::string playerLog;
+    std::string enemyLog;
+    sf::Text logLeftText;
+    sf::Text logRightText;
 
     sf::RectangleShape attackButton;
     sf::RectangleShape defendButton;
@@ -24,10 +28,19 @@ class GameScreen : public Screen {
     sf::Texture backgroundTexture;
     sf::Sprite background;
 
+    sf::RectangleShape logBackground;
+
+    sf::Texture playerTexture;
+    sf::Sprite playerSprite;
+
+    bool showPopup = false;
+    sf::RectangleShape popupBox;
+    sf::Text popupText;
+
     void performPlayerAttack();
     void performPlayerDefense();
 
-    void performEnemyAttack(std::string& log);
+    void performEnemyAttack();
     void assignEnemyTexture();
     bool finished = false;
 

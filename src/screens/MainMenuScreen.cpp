@@ -2,7 +2,7 @@
 #include <iostream>
 
 MainMenuScreen::MainMenuScreen() {
-    if (!font.loadFromFile("assets/arial.ttf")) {
+    if (!font.loadFromFile("assets/Spectral-Regular.ttf")) {
         std::cerr << "Nie udało się wczytać czcionki\n";
     }
     if (!backgroundTexture.loadFromFile("assets/menu_bg.png")) {
@@ -19,12 +19,12 @@ MainMenuScreen::MainMenuScreen() {
         );
 
     title.setFont(font);
-    title.setString("DnD Battle");
+    title.setString(L"DnD Battle");
     title.setCharacterSize(36);
     title.setPosition(280, 100);
 
     startOption.setFont(font);
-    startOption.setString("Press ENTER to start");
+    startOption.setString(L"Naciśnij ENTER żeby rozpocząć");
     startOption.setCharacterSize(24);
     startOption.setPosition(200, 200);
 }

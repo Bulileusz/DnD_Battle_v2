@@ -2,7 +2,7 @@
 #include <iostream>
 
 ClassSelectionScreen::ClassSelectionScreen() {
-    if (!font.loadFromFile("assets/arial.ttf")) {
+    if (!font.loadFromFile("assets/Spectral-Regular.ttf")) {
         std::cerr << "Czcionka - w selekcji klasy - problem\n";
     }
     if (!backgroundTexture.loadFromFile("assets/class_bg.png")) {
@@ -19,22 +19,22 @@ ClassSelectionScreen::ClassSelectionScreen() {
         );
 
     title.setFont(font);
-    title.setString("Wybierz klasę postaci:");
+    title.setString(L"Wybierz klasę postaci:");
     title.setCharacterSize(30);
     title.setPosition(220, 80);
 
     warriorOption.setFont(font);
-    warriorOption.setString("1. Wojownik");
+    warriorOption.setString(L"1. Wojownik");
     warriorOption.setCharacterSize(24);
     warriorOption.setPosition(250, 160);
 
     mageOption.setFont(font);
-    mageOption.setString("2. Mag");
+    mageOption.setString(L"2. Mag");
     mageOption.setCharacterSize(24);
     mageOption.setPosition(250, 200);
 
     archerOption.setFont(font);
-    archerOption.setString("3. Łucznik");
+    archerOption.setString(L"3. Łucznik");
     archerOption.setCharacterSize(24);
     archerOption.setPosition(250, 240);
 }
