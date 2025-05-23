@@ -14,11 +14,15 @@ Projekt stworzony jako gra typu DnD (Dungeon & Dragons) z prostą mechaniką wal
 
 ## Wymagania
 
-- SFML 2.6.1
-- Kompilator C++ (GCC/MinGW lub MSVC)
-- CMake
-- (Opcjonalnie) CLion lub Visual Studio Code
-
+- System operacyjny: Windows
+- Nie wymaga instalacji - wystarczy uruchomić plik .bat
+- Wszystkie potrzebne pliki (.exe, grafiki itp.) są zawarte w paczce .zip
+- Jeśli chcesz zbudować projekt samodzielnie:
+    SFML 2.6.1
+    Kompilator C++ (GCC/MinGW lub MSVC)
+    CMake
+    (Opcjonalnie) CLion lub Visual Studio Code
+  
 ## Klasy postaci
 
 | Klasa     | HP   | Atak | Obrona |
