@@ -18,7 +18,10 @@ add_executable(DnD_Battle
         src/screens/MainMenuScreen.cpp
         src/screens/ClassSelectionScreen.cpp
         src/screens/GameScreen.cpp
-        src/screens/GameOverScreen.cpp)
+        src/screens/GameOverScreen.cpp
+        src/gui/HealthBar.cpp
+        src/gui/HealthBar.h
+        src/gui/Button.cpp)
 
 # SFML
 find_package(SFML COMPONENTS graphics window system REQUIRED)

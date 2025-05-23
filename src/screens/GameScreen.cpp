@@ -6,7 +6,10 @@
 sf::Texture goblinTex, orcTex, bossTex;
 
 GameScreen::GameScreen(Player::ClassType selectedClass)
-    : player(selectedClass), enemy(BattleManager().spawnEnemyForLevel(1)) {
+    : player(selectedClass), enemy(BattleManager().spawnEnemyForLevel(1)),
+    attackButton(L"Atak", sf::Vector2f(480.f, 500.f), sf::Color(200,60, 60), font),
+    defendButton(L"Obrona", sf::Vector2f(640.f, 500.f), sf::Color(60, 60, 200), font)
+{
     std::string PlayerPath;
 
     std::string path = player.getSpritePath();
@@ -38,13 +41,19 @@ GameScreen::GameScreen(Player::ClassType selectedClass)
         static_cast<float>(windowSize.y) / textureSize.y
     );
     // Staty
-    playerStats.setFont(font);
-    playerStats.setCharacterSize(20);
-    playerStats.setPosition(50, 30);
 
-    enemyStats.setFont(font);
-    enemyStats.setCharacterSize(20);
-    enemyStats.setPosition(500, 30);
+
+    playerStats.setFont(font);
+    playerStats.setCharacterSize(13);
+
+    // sf::Vector2f hpBarPos = playerHpBar.getPosition();
+    //
+    // playerStats.setOrigin(playerStats.getLocalBounds().width / 2.f, 0.f);
+    // playerStats.setPosition(hpBarPos.x + 10.f, hpBarPos.y - 20.f);
+
+    // enemyStats.setFont(font);
+    // enemyStats.setCharacterSize(20);
+    // enemyStats.setPosition(500, 30);
 
     // Logi
     logLeftText.setFont(font);
@@ -64,23 +73,26 @@ GameScreen::GameScreen(Player::ClassType selectedClass)
     logBackground.setOutlineColor(sf::Color::White);
 
     // Przyciski
-    attackButton.setSize({140, 40});
-    attackButton.setPosition(50, 500);
-    attackButton.setFillColor(sf::Color(150, 50, 50));
+    // attackButton = Button(L"Atak",{50, 500}, sf::Color(150,50,50),font);
+    // defendButton = Button(L"Obrona", {250, 500}, sf::Color(50, 50, 150), font);
 
-    attackLabel.setFont(font);
-    attackLabel.setCharacterSize(20);
-    attackLabel.setString(L"Atak");
-    attackLabel.setPosition(90, 508);
-
-    defendButton.setSize({140, 40});
-    defendButton.setPosition(250, 500);
-    defendButton.setFillColor(sf::Color(50, 50, 150));
-
-    defendLabel.setFont(font);
-    defendLabel.setCharacterSize(20);
-    defendLabel.setString(L"Obrona");
-    defendLabel.setPosition(275, 508);
+    // attackButton.setSize({140, 40});
+    // attackButton.setPosition(50, 500);
+    // attackButton.setFillColor(sf::Color(150, 50, 50));
+    //
+    // attackLabel.setFont(font);
+    // attackLabel.setCharacterSize(20);
+    // attackLabel.setString(L"Atak");
+    // attackLabel.setPosition(90, 508);
+    //
+    // defendButton.setSize({140, 40});
+    // defendButton.setPosition(250, 500);
+    // defendButton.setFillColor(sf::Color(50, 50, 150));
+    //
+    // defendLabel.setFont(font);
+    // defendLabel.setCharacterSize(20);
+    // defendLabel.setString(L"Obrona");
+    // defendLabel.setPosition(275, 508);
 
     // Tekst na środku:
     popupBox.setSize({600.f, 140.f});
@@ -93,6 +105,12 @@ GameScreen::GameScreen(Player::ClassType selectedClass)
     popupText.setCharacterSize(20);
     popupText.setFillColor(sf::Color::White);
     popupText.setPosition(120.f, 220.f);
+
+
+    //HP
+    playerHpBar.setPosition(100.f,440.f);
+    enemyHpBar.setPosition(500.f, 200.f);
+
 
     //TEST - INSTANT LOSE:
     // player.takeDamage(player.hp());
@@ -109,12 +127,12 @@ void GameScreen::handleEvent(sf::Event &event, sf::RenderWindow &window) {
         sf::Vector2i mousePos = sf::Mouse::getPosition(window);
         sf::Vector2f mouseWorldPos = window.mapPixelToCoords(mousePos);
 
-        if (attackButton.getGlobalBounds().contains(mouseWorldPos)) {
+        if (attackButton.isClicked(mouseWorldPos)) {
             performPlayerAttack();
             //TEST - INSTA DEAD:
             // player.takeDamage(player.hp());
             // logText.setString("Gracz padł!");
-        } else if (defendButton.getGlobalBounds().contains(mouseWorldPos)) {
+        } else if (defendButton.isClicked(mouseWorldPos)) {
             performPlayerDefense();
         }
     }
@@ -124,14 +142,29 @@ void GameScreen::update() {
     if (enemy.hp() <= 0 && !finished) {
         finished = true;
     }
-    playerStats.setString(L"Gracz HP: " + std::to_wstring(player.hp()));
-    enemyStats.setString(L"Wróg HP: " + std::to_wstring(enemy.hp()));
+
+
+    sf::Vector2f playerPos = playerSprite.getPosition();
+    playerHpBar.setPosition(playerSprite.getPosition().x + 180.f, playerSprite.getPosition().y - 15.f);
+
+    sf::Vector2f enemyPos = enemy.getSprite().getPosition();
+    enemyHpBar.setPosition(enemy.getSprite().getPosition().x + 45.f, enemy.getSprite().getPosition().y - 15.f);
+
+
+    playerHpBar.update(player.hp(), player.getMaxHp());
+    sf::Vector2f hpBarPos = playerHpBar.getPosition();
+    playerStats.setString(L"HP: " + std::to_wstring(player.hp()));
+    playerStats.setOrigin(playerStats.getLocalBounds().width / 2.f, 0.f);
+    playerStats.setPosition(hpBarPos.x + 30.f, hpBarPos.y - 5.f);
+
+    enemyHpBar.update(enemy.hp(), enemy.getMaxHp());
+
 }
 
 void GameScreen::render(sf::RenderWindow &window) {
     window.draw(background);
-    window.draw(playerStats);
-    window.draw(enemyStats);
+
+    // window.draw(enemyStats);
     window.draw(enemy.getSprite());
     window.draw(playerSprite);
 
@@ -139,10 +172,16 @@ void GameScreen::render(sf::RenderWindow &window) {
     window.draw(logLeftText);
     window.draw(logRightText);
 
-    window.draw(attackButton);
+    // window.draw(attackButton);
+    attackButton.render(window);
     window.draw(attackLabel);
-    window.draw(defendButton);
+    // window.draw(defendButton);
+    defendButton.render(window);
     window.draw(defendLabel);
+
+    playerHpBar.render(window);
+    enemyHpBar.render(window);
+    window.draw(playerStats);
 
     if (showPopup) {
         window.draw(popupBox);
@@ -176,13 +215,13 @@ void GameScreen::performPlayerAttack() {
         enemy.takeDamage(dmg);
         playerLog += "Trafiasz za " + std::to_string(dmg) + " obrażeń!\n";
 
-        // ✅ Sprawdź czy boss padł — zakończ grę
+
         if (enemy.hp() <= 0 && enemy.name() == "Demon Lord") {
             finished = true;
             return;
         }
 
-        // ✅ Jeśli padł zwykły wróg – kontynuuj
+
         else if (enemy.hp() <= 0) {
             waveNumber++;
             player.gainExp(50);
@@ -217,7 +256,7 @@ void GameScreen::performPlayerAttack() {
         playerLog += "Wróg zablokował atak.";
     }
 
-    // ✅ Jeśli wróg nadal żyje, atakuje
+
     if (enemy.hp() > 0) {
         performEnemyAttack();
     }

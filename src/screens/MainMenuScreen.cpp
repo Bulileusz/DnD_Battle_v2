@@ -21,12 +21,18 @@ MainMenuScreen::MainMenuScreen() {
     title.setFont(font);
     title.setString(L"DnD Battle");
     title.setCharacterSize(36);
-    title.setPosition(280, 100);
+    title.setFillColor(sf::Color::White);
+    title.setPosition(800/2.f - title.getLocalBounds().width / 2.f, 200.f);
+    title.setOutlineColor(sf::Color::Black);
+    title.setOutlineThickness(2.f);
 
     startOption.setFont(font);
     startOption.setString(L"Naciśnij ENTER żeby rozpocząć");
     startOption.setCharacterSize(24);
-    startOption.setPosition(200, 200);
+    startOption.setFillColor(sf::Color::White);
+    startOption.setPosition(800/2.f - startOption.getLocalBounds().width/2.f, 270.f);
+    startOption.setOutlineColor(sf::Color::Black);
+    startOption.setOutlineThickness(1.5f);
 }
 
 void MainMenuScreen::handleEvent(sf::Event &event, sf::RenderWindow& window) {

@@ -1,7 +1,7 @@
 #include "Enemy.h"
 
 Enemy::Enemy(std::string name, int hp, int atk, int def)
-        : Character(std::move(name), hp, atk, def) {}
+        : Character(std::move(name), hp, atk, def), maxHp_(hp) {}
 
 Enemy Enemy::createGoblin() {
     return Enemy("Goblin", 50, 8, 2);
@@ -40,4 +40,8 @@ void Enemy::setTexture(const sf::Texture& tex) {
 
 const sf::Sprite& Enemy::getSprite() const {
     return sprite_;
+}
+
+int Enemy::getMaxHp() const {
+    return maxHp_;
 }

@@ -21,19 +21,27 @@ GameOverScreen::GameOverScreen(int level, int exp, int wave) {
     title.setFont(font);
     title.setString(L"KONIEC GRY");
     title.setCharacterSize(36);
-    title.setPosition(270, 100);
+    title.setFillColor(sf::Color::White);
+    title.setPosition(800/2.f - title.getLocalBounds().width / 2.f, 150.f);
 
     statsText.setFont(font);
     statsText.setCharacterSize(24);
-    statsText.setPosition(200, 200);
-  statsText.setString(L"Poziom: " + std::to_wstring(level) +
-                  L"    | EXP: " + std::to_wstring(exp) +
-                  L"    | Fala: " + std::to_wstring(wave));
+    statsText.setFillColor(sf::Color::White);
 
-    prompt.setFont(font);
-    prompt.setCharacterSize(20);
-    prompt.setPosition(220, 300);
-    prompt.setString(L"Wciśnij ENTER, aby wrócić do menu");
+
+
+  std::wstring stats = L"Poziom: " + std::to_wstring(level) +
+                   L"    |    EXP: " + std::to_wstring(exp) +
+                   L"    |    Fala: " + std::to_wstring(wave);
+
+  statsText.setString(stats);
+  statsText.setPosition(800/2.f - statsText.getLocalBounds().width / 2.f, 230.f);
+
+  prompt.setFont(font);
+  prompt.setCharacterSize(18);
+  prompt.setFillColor(sf::Color::White);
+  prompt.setString(L"Wciśnij ENTER, aby wrócić do wyboru klasy.");
+  prompt.setPosition(800/2.f - prompt.getLocalBounds().width / 2.f, 310.f);
 
  }
 

@@ -21,22 +21,23 @@ ClassSelectionScreen::ClassSelectionScreen() {
     title.setFont(font);
     title.setString(L"Wybierz klasę postaci:");
     title.setCharacterSize(30);
-    title.setPosition(220, 80);
+
+    title.setPosition(400.f - title.getLocalBounds().width/2.f,80.f);
 
     warriorOption.setFont(font);
     warriorOption.setString(L"1. Wojownik");
     warriorOption.setCharacterSize(24);
-    warriorOption.setPosition(250, 160);
+    warriorOption.setPosition(400.f - warriorOption.getLocalBounds().width / 2.f, 160.f);
 
     mageOption.setFont(font);
     mageOption.setString(L"2. Mag");
     mageOption.setCharacterSize(24);
-    mageOption.setPosition(250, 200);
+    mageOption.setPosition(400.f - mageOption.getLocalBounds().width / 2.f, 200.f);
 
     archerOption.setFont(font);
     archerOption.setString(L"3. Łucznik");
     archerOption.setCharacterSize(24);
-    archerOption.setPosition(250, 240);
+    archerOption.setPosition(400.f - archerOption.getLocalBounds().width / 2.f, 240.f);
 }
 
 void ClassSelectionScreen::handleEvent(sf::Event &event, sf::RenderWindow &window) {

@@ -4,9 +4,19 @@
 #include "../character/Enemy.h"
 #include "../logic/BattleManager.h"
 #include <SFML/Graphics.hpp>
+#include "../gui/HealthBar.h"
+#include "../gui/Button.h"
+
+
 
 class GameScreen : public Screen {
   private:
+
+    Button attackButton;
+    Button defendButton;
+    HealthBar playerHpBar;
+    HealthBar enemyHpBar;
+
     Player player;
     Enemy enemy;
     BattleManager battleManager;
@@ -20,8 +30,8 @@ class GameScreen : public Screen {
     sf::Text logLeftText;
     sf::Text logRightText;
 
-    sf::RectangleShape attackButton;
-    sf::RectangleShape defendButton;
+    // sf::RectangleShape attackButton;
+    // sf::RectangleShape defendButton;
     sf::Text attackLabel;
     sf::Text defendLabel;
 
@@ -45,6 +55,7 @@ class GameScreen : public Screen {
     bool finished = false;
 
     int waveNumber = 1;
+
 
     public:
       GameScreen(Player::ClassType selectedClass);

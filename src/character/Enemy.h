@@ -14,6 +14,10 @@ public:
     void setTexture(const sf::Texture& tex);
     const sf::Sprite& getSprite() const;
 
+    int getMaxHp() const;
+
+
 private:
     sf::Sprite sprite_;
+    int maxHp_;
 };
