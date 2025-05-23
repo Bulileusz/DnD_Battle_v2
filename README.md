@@ -5,7 +5,7 @@ Projekt stworzony jako gra typu DnD (Dungeon & Dragons) z prostą mechaniką wal
 ## Funkcjonalności
 
 - Wybór klasy postaci: Wojownik, Mag, Łucznik
-- Walka turowa z wrogami (Goblin, Ork, Demon Lord)
+- Walka turowa z wrogami (Goblin, Ork, Demon Lord - Boss)
 - Rzuty kością D20 z trafieniem, krytykiem i obroną
 - Pasek życia dla gracza i przeciwnika
 - Dynamiczne popupy i logi walki
